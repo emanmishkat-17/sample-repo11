@@ -1,0 +1,4 @@
+body { background: #f8f9fa; }
+#contactsTable td { vertical-align: middle; }
+#contactsTable .btn { margin-left: 4px; }
+.empty-row { color: #6c757d; }
