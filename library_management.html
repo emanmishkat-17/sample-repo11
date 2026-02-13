@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Library Management System</title>
+
+<style>
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #1e3c72, #2a5298);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.container {
+    width: 600px;
+    background: white;
+    padding: 25px;
+    border-radius: 15px;
+    box-shadow: 0 15px 30px rgba(0,0,0,0.3);
+}
+
+h1 {
+    text-align: center;
+    color: #2a5298;
+}
+
+.form {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 15px;
+}
+
+.form input, .form select {
+    flex: 1;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+}
+
+button {
+    padding: 10px 15px;
+    border-radius: 8px;
+    border: none;
+    background: #2a5298;
+    color: white;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #1e3c72;
+}
+
+#search {
+    width: 100%;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    margin-bottom: 10px;
+}
+
+.book-card {
+    background: #f4f6f9;
+    padding: 12px;
+    border-radius: 10px;
+    margin-bottom: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.status {
+    font-weight: bold;
+}
+
+.available {
+    color: green;
+}
+
+.borrowed {
+    color: red;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+    <h1>📚 Library Management System</h1>
+
+    <div class="form">
+        <input type="text" id="title" placeholder="Book Title">
+        <input type="text" id="author" placeholder="Author Name">
+        <select id="status">
+            <option value="Available">Available</option>
+            <option value="Borrowed">Borrowed</option>
+        </select>
+        <button onclick="addBook()">Add Book</button>
+    </div>
+
+    <input type="text" id="search" placeholder="Search by title..." onkeyup="searchBook()">
+
+    <div id="bookList"></div>
+</div>
+
+<script>
+let books = [];
+
+function addBook() {
+    let title = document.getElementById("title").value;
+    let author = document.getElementById("author").value;
+    let status = document.getElementById("status").value;
+
+    if (title === "" || author === "") {
+        alert("Please fill all fields!");
+        return;
+    }
+
+    let book = {
+        title: title,
+        author: author,
+        status: status
+    };
+
+    books.push(book);
+    displayBooks();
+    clearFields();
+}
+
+function displayBooks() {
+    let bookList = document.getElementById("bookList");
+    bookList.innerHTML = "";
+
+    books.forEach((book, index) => {
+        bookList.innerHTML += `
+            <div class="book-card">
+                <div>
+                    <strong>${book.title}</strong> by ${book.author}
+                    <br>
+                    <span class="status ${book.status === 'Available' ? 'available' : 'borrowed'}">
+                        ${book.status}
+                    </span>
+                </div>
+                <button onclick="deleteBook(${index})">Delete</button>
+            </div>
+        `;
+    });
+}
+
+function deleteBook(index) {
+    books.splice(index, 1);
+    displayBooks();
+}
+
+function searchBook() {
+    let input = document.getElementById("search").value.toLowerCase();
+    let filtered = books.filter(book =>
+        book.title.toLowerCase().includes(input)
+    );
+
+    let bookList = document.getElementById("bookList");
+    bookList.innerHTML = "";
+
+    filtered.forEach((book) => {
+        bookList.innerHTML += `
+            <div class="book-card">
+                <div>
+                    <strong>${book.title}</strong> by ${book.author}
+                    <br>
+                    <span class="status ${book.status === 'Available' ? 'available' : 'borrowed'}">
+                        ${book.status}
+                    </span>
+                </div>
+            </div>
+        `;
+    });
+}
+
+function clearFields() {
+    document.getElementById("title").value = "";
+    document.getElementById("author").value = "";
+}
+</script>
+
+</body>
+</html>
